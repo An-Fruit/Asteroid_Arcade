@@ -1,3 +1,5 @@
+import java.awt.BorderLayout;
+
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 
@@ -9,10 +11,10 @@ public class GameRunner {
 	public static void main( String args[] )
 	{		
 		JFrame window = new JFrame("Game Runner");
+		AstroidGame game = new AstroidGame();
 		
-		// adds the game to the JFrame
 		window.setVisible(true);
-		window.add(window);
+		window.add(BorderLayout.NORTH, game);
 		window.setSize(WIDTH,HEIGHT);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
