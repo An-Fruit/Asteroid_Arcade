@@ -1,22 +1,16 @@
 import javax.swing.JFrame;
 
-public class GameRunner extends JFrame{
+public class GameRunner {
 	
-	
-	public GameRunner() {
-		super("Game Runner");
-
-		setSize(WIDTH,HEIGHT);
-			
-        AsteroidGame game = new AsteroidGame();
-       
-		add(game);
-		
-		setVisible(true);	
-
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	}
 	public static void main(String[] args) throws Exception{
-		new GameRunner();
+		
+		JFrame window = new JFrame("Board Game Runner");
+		AsteroidGame game = new AsteroidGame();
+			
+       
+		window.add(game);
+		window.setVisible(true);
+		window.setSize(1000,1000);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }
