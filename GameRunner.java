@@ -1,16 +1,29 @@
+import java.awt.Color;
+
 import javax.swing.JFrame;
 
-public class GameRunner {
+public class GameRunner extends JFrame{
+	
+	public static final int WIDTH = 1000;
+	public static final int HEIGHT = 1000;
+	
+	public GameRunner() {
+		super("Game Runner");
+
+		setSize(WIDTH,HEIGHT);
+			
+        AsteroidGame game = new AsteroidGame();
+       
+		add(game);
+		
+		setVisible(true);	
+		
+		setBackground(Color.BLUE);
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
 	
 	public static void main(String[] args) throws Exception{
-		
-		JFrame window = new JFrame("Board Game Runner");
-		AsteroidGame game = new AsteroidGame();
-			
-       
-		window.add(game);
-		window.setVisible(true);
-		window.setSize(1000,1000);
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		new GameRunner();
 	}
 }
