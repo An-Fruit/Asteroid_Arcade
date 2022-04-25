@@ -23,16 +23,16 @@ public class rotationPanel extends JPanel {
 
     // point arrays which contain the points that are rotated around the center 
     Point[] points1;
-    Point[] points2;
-    Point[] points3;
+//    Point[] points2;
+//    Point[] points3;
 
     // The center of rotation  
     Point center;
 
     // the polygons being rotated
     Polygon poly1;
-    Polygon poly2;
-    Polygon poly3;
+//    Polygon poly2;
+//    Polygon poly3;
 
     // the angle of rotation
     double angle;
@@ -63,8 +63,8 @@ public class rotationPanel extends JPanel {
 
         // initializing the arrays (not neccesary)
         points1 = getOriginalPoints(1);
-        points3 = getOriginalPoints(3);
-        points2 = getOriginalPoints(2);
+//        points3 = getOriginalPoints(3);
+//        points2 = getOriginalPoints(2);
 
         // setting the rotation to the middle of the screen
         center = new Point(250,250);
@@ -81,13 +81,13 @@ public class rotationPanel extends JPanel {
         // rotate the points the spcified angle and store the rotated
         //points to the correct array
         rotatePointMatrix(getOriginalPoints(1),angle,points1);
-        rotatePointMatrix(getOriginalPoints(2),angle,points2);
-        rotatePointMatrix(getOriginalPoints(3),angle,points3);
+//        rotatePointMatrix(getOriginalPoints(2),angle,points2);
+//        rotatePointMatrix(getOriginalPoints(3),angle,points3);
 
         // Make the points into a polygon
         poly1 = polygonize(points1);
-        poly2 = polygonize(points2);
-        poly3 = polygonize(points3);
+//        poly2 = polygonize(points2);
+//        poly3 = polygonize(points3);
 
         // increase the angle by one degree, resulting to rotation in the longer run
         angle++;
@@ -119,14 +119,12 @@ public class rotationPanel extends JPanel {
 
     public void rotatePointMatrix(Point[] origPoints, double angle, Point[] storeTo){
 
-        /* We ge the original points of the polygon we wish to rotate
+        /* We get the original points of the polygon we wish to rotate
          *  and rotate them with affine transform to the given angle. 
-         *  After the opeariont is complete the points are stored to the 
+         *  After the operation is complete the points are stored to the 
          *  array given to the method.
         */
-        AffineTransform.getRotateInstance
-        (Math.toRadians(angle), center.x, center.y)
-                .transform(origPoints,0,storeTo,0,5);
+        AffineTransform.getRotateInstance(Math.toRadians(angle), center.x, center.y).transform(origPoints,0,storeTo,0,5);
 
 
     }
@@ -204,20 +202,20 @@ public class rotationPanel extends JPanel {
                     RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
 
-           g2d.setColor(Color.GRAY);
-           g2d.fillPolygon(poly2);
+//           g2d.setColor(Color.GRAY);
+//           g2d.fillPolygon(poly2);
 
            g2d.setColor(Color.yellow);
            g2d.fillPolygon(poly1);
 
-           g2d.setColor(Color.yellow);
-           g2d.fillPolygon(poly3);
+//           g2d.setColor(Color.yellow);
+//           g2d.fillPolygon(poly3);
 
 
            g2d.setColor(Color.WHITE);
            for(int  i=0; i < points1.length; i++){
                 g2d.fillRect(points1[i].x-1, points1[i].y-1, 3, 3);
-                g2d.fillRect(points3[i].x-1, points3[i].y-1, 3, 3);
+//                g2d.fillRect(points3[i].x-1, points3[i].y-1, 3, 3);
 
             }
 
