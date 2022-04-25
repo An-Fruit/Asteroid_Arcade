@@ -8,6 +8,7 @@ public class Prop extends JPanel{
 	int xVel, yVel, xLoc, yLoc;
 	boolean hit;
 	Polygon bBox;
+	Point center;
 	
 	public Prop(int x, int y, int xVel, int yVel, Polygon r) {
 		xLoc = x;
@@ -34,5 +35,14 @@ public class Prop extends JPanel{
 	
 	public Polygon getPoly() {
 		return bBox;
+	}
+	
+	public Point getCenter() {
+		return center;
+	}
+	
+	public void move() {
+		xLoc+=xVel;
+		yLoc+=yVel;
 	}
 }
