@@ -11,8 +11,7 @@ public class Prop extends JPanel{
 	Point center;
 	
 	public Prop(int x, int y, int xVel, int yVel, Polygon r) {
-		xLoc = x;
-		yLoc = y;
+		center = new Point(x,y);
 		this.xVel = xVel;
 		this.yVel = yVel;
 		hit = false;
@@ -42,7 +41,7 @@ public class Prop extends JPanel{
 	}
 	
 	public void move() {
-		xLoc+=xVel;
-		yLoc+=yVel;
+		center.x+=xVel;
+		center.y+=yVel;
 	}
 }
