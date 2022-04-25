@@ -30,4 +30,12 @@ public class Prop extends JPanel{
 	public boolean gotHit() {
 		return hit;
 	}
+	
+	public void setPoly(Polygon p) {
+		bBox = p;
+	}
+	
+	public Polygon getPoly() {
+		return bBox;
+	}
 }
