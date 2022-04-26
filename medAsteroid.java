@@ -13,7 +13,18 @@ public class medAsteroid extends Prop {
 		changeAsteroid();
 	}
 	
-	public void split() {
+	public void collapse() {
+		int angle;
+		if (xVel <0) {
+			angle = (int)Math.toDegrees(Math.atan(yVel/xVel))+180;
+		}
+		else if (xVel>=0) {
+			angle = (int)Math.toDegrees(Math.atan(yVel/xVel));
+		}
+		
+		smallAsteroid split1 = new smallAsteroid(this);
+		
+		
 		for (int i=0;i<3;i++) {
 			
 		}
