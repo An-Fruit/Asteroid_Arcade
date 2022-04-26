@@ -13,8 +13,19 @@ public class Ship extends Prop{
 		// TODO Auto-generated constructor stub
 	}
 
-
-
+	public void setMoveVec() {
+		this.yVel = 10 * Math.sin(rotationAngle);
+		this.xVel = 10 * Math.cos(rotationAngle);
+	}
+	
+	public void move() {
+		for(Point pt : pts) {
+			pt.x += xVel;
+			pt.y += yVel;
+		}
+		super.setPoly(polygonize());
+	}
+	
 	public void rotateShip(double inc) {
 		rotatePointMatrix(getOriginalPts(), rotationAngle, pts);
 		Polygon polytemp = polygonize();
@@ -25,8 +36,9 @@ public class Ship extends Prop{
 		if(rotationAngle <= -360) {
 			rotationAngle %= 360;
 		}
+		setMoveVec();
 		super.setPoly(polytemp);
-		
+	
 	}
 	
 	public void rotatePointMatrix(Point[] original, double angle, Point[] fin){
@@ -56,9 +68,9 @@ public class Ship extends Prop{
 	public Point[] getOriginalPts() {
 		Point[] origin;
 		origin = new Point[3];
-		origin[0] = new Point(getCenter().x + 8,getCenter().y - 8);
-		origin[1] = new Point(getCenter().x - 8,getCenter().y - 8);
-		origin[2] = new Point(getCenter().x, getCenter().y + 12);
+		origin[0] = new Point((int)getCenter().x + 8,(int)getCenter().y - 8);
+		origin[1] = new Point((int)getCenter().x - 8,(int)getCenter().y - 8);
+		origin[2] = new Point((int)getCenter().x, (int)getCenter().y + 12);
 		return origin;
 	}
 }

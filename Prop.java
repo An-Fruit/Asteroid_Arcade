@@ -5,13 +5,14 @@ import javax.swing.JPanel;
 
 public class Prop extends JPanel{
 
-	int xVel, yVel, xLoc, yLoc;
+	double xVel;
+	double yVel;
+	Point center;
 	boolean hit;
 	Polygon bBox;
-	Point center;
 	
 	public Prop(int x, int y, int xVel, int yVel, Polygon r) {
-		center = new Point(x,y);
+		center = new Point(x, y);
 		this.xVel = xVel;
 		this.yVel = yVel;
 		hit = false;
@@ -23,6 +24,9 @@ public class Prop extends JPanel{
 		g.drawPolygon(bBox);
 	}
 	
+	public Point getCenter() {
+		return center;
+	}
 	
 	public boolean gotHit() {
 		return hit;
@@ -35,13 +39,9 @@ public class Prop extends JPanel{
 	public Polygon getPoly() {
 		return bBox;
 	}
-	
-	public Point getCenter() {
-		return center;
-	}
-	
 	public void move() {
-		center.x+=xVel;
-		center.y+=yVel;
+		center.x += xVel;
+		center.y += yVel;
+		bBox.translate((int)xVel,  (int)yVel);
 	}
 }

@@ -33,7 +33,9 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 		else if(arg0.getKeyCode() == 39) {
 			ship.rotateShip(7.0);
 		}
-		else if(arg0.getKeyCode() == 38)
+		else if(arg0.getKeyCode() == 38) {
+			ship.move();
+		}
 		System.out.println(arg0.getKeyCode());
 	}
 
