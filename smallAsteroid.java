@@ -7,8 +7,8 @@ public class smallAsteroid extends Prop{
 	public smallAsteroid(int x, int y, int xVel, int yVel) {
 		super(x, y, xVel, yVel, new Polygon());
 		smallAsts = new Polygon[2];
-		smallAsts[0] = new Polygon(new int[] {x+12, x+28, x+33, x+24, x+14, }, new int[] {y+11, y+2, y+14, y+23, y+13, }, 5);
-		smallAsts[1] = new Polygon(new int[] {x+20, x+20, x+39, x+52, x+32, x+23,  }, new int[] {y+15, y+18, y+5, y+21, y+29, y+22,  }, 6);
+		smallAsts[0] = new Polygon(new int[] {(int)center.x+12, (int)center.x+28, (int)center.x+33, (int)center.x+24, (int)center.x+14, }, new int[] {(int)center.y+11, (int)center.y+2, (int)center.y+14, (int)center.y+23, (int)center.y+13, }, 5);
+		smallAsts[1] = new Polygon(new int[] {(int)center.x+20, (int)center.x+20, (int)center.x+39, (int)center.x+52, (int)center.x+32, (int)center.x+23,  }, new int[] {(int)center.y+15, (int)center.y+18, (int)center.y+5, (int)center.y+21, (int)center.y+29, (int)center.y+22,  }, 6);
 		changeAsteroid();
 	}
 	
