@@ -7,18 +7,30 @@ public class Ship extends Prop{
 	
 	Point[] pts = getOriginalPts();
 	double rotationAngle;
+	Point origin;
+	
 	public Ship(int x, int y) {
-		super(x, y, 20,20,new Polygon(new int[] {x + 8, x - 8, x}, new int[] {y - 8, y - 8, y + 12}, 3));
+		super(x, y, 0,0,new Polygon(new int[] {x + 8, x - 8, x}, new int[] {y - 8, y - 8, y + 12}, 3));
 		rotationAngle = 0.0;
+		origin = new Point(x,y);
 		// TODO Auto-generated constructor stub
 	}
 
 	public void setMoveVec() {
-		this.yVel = 10 * Math.sin(rotationAngle);
-		this.xVel = 10 * Math.cos(rotationAngle);
+		if(rotationAngle == 0.0) {
+			this.yVel = 10;
+			this.xVel = 0;
+		}
+		else {
+			this.yVel = 10 * Math.sin(Math.toRadians(rotationAngle+90));
+			this.xVel = 10 * Math.cos(Math.toRadians(rotationAngle+90));
+		}
+		
 	}
 	
 	public void move() {
+		getCenter().x += xVel;
+		getCenter().y += yVel;
 		for(Point pt : pts) {
 			pt.x += xVel;
 			pt.y += yVel;
@@ -27,14 +39,14 @@ public class Ship extends Prop{
 	}
 	
 	public void rotateShip(double inc) {
-		rotatePointMatrix(getOriginalPts(), rotationAngle, pts);
+		rotatePointMatrix(getOriginalPts(), rotationAngle + inc, pts);
 		Polygon polytemp = polygonize();
 		rotationAngle += inc;
 		if(rotationAngle >= 360) {
 			rotationAngle %= 360;
 		}
-		if(rotationAngle <= -360) {
-			rotationAngle %= 360;
+		if(rotationAngle < 0) {
+			rotationAngle = 360 + rotationAngle;
 		}
 		setMoveVec();
 		super.setPoly(polytemp);
