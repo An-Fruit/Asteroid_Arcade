@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
@@ -84,5 +85,11 @@ public class Ship extends Prop{
 		origin[1] = new Point((int)getCenter().x - 8,(int)getCenter().y - 8);
 		origin[2] = new Point((int)getCenter().x, (int)getCenter().y + 12);
 		return origin;
+	}
+	
+	public void paintComponent(Graphics g) {
+		g.setColor(new Color(255,100,255));
+		g.drawPolygon(bBox);
+		
 	}
 }
