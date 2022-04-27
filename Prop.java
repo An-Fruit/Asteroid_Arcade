@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
 import java.awt.Rectangle;
@@ -21,6 +22,7 @@ public class Prop extends JPanel{
 	
 	
 	public void paintComponent(Graphics g) {
+		g.setColor(Color.WHITE);
 		g.drawPolygon(bBox);
 	}
 	

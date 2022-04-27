@@ -4,26 +4,13 @@ import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
 
 import javax.swing.JPanel;
 
 public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 	Ship ship;
-	HashSet<Prop> Asteroids;
-	Queue<Prop> AsteroidsQ;
-	Queue<Prop> RemoveAsteroidsQ;
 	public AsteroidGame() {
-		// instantiates instance variables
-		Asteroids = new HashSet<>();
-		Asteroids.add(new bigAsteroid(100,0,10,5));
-		AsteroidsQ = new LinkedList<>();
 		ship = new Ship(500,500);
-		RemoveAsteroidsQ = new LinkedList<>();
-		
-		// sets up JPanel properties
 		addKeyListener(this);
 		setFocusable(true);
 		new Thread(this).start();
@@ -32,24 +19,9 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 	
 		g.setColor(Color.BLACK);
 		g.fillPolygon(new Polygon(new int[] {0,1000,1000,0}, new int[] {0,0,1000,1000}, 4));
+		g.setColor(new Color(255,100,255));
+		//ship.rotateShip();
 		ship.paintComponent(g);
-		
-		// Is responsible for running all the Asteroids
-		for (Prop p: Asteroids) {
-			p.paintComponent(g);
-			if (p instanceof bigAsteroid) {
-				((bigAsteroid) p).collapse(AsteroidsQ);
-			}
-			if (p instanceof medAsteroid) {
-				((medAsteroid) p).collapse(AsteroidsQ);
-			}
-		}
-		while(!AsteroidsQ.isEmpty()) {
-			Asteroids.add(AsteroidsQ.poll());
-		}
-		while(!RemoveAsteroidsQ.isEmpty()) {
-			Asteroids.remove(RemoveAsteroidsQ.poll());
-		}
 	}
 
 	@Override
@@ -63,6 +35,10 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 		}
 		else if(arg0.getKeyCode() == 38) {
 			ship.move();
+		}
+		else if(arg0.getKeyCode() == 32) {
+			double[] temp = ship.getMoveVec();
+			
 		}
 		System.out.println(arg0.getKeyCode());
 	}
@@ -86,7 +62,7 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 		{
 			while(true)
 			{
-				Thread.sleep(10);
+				Thread.sleep(50);
 				repaint();
 			}
 			
