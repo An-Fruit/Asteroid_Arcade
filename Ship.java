@@ -10,7 +10,7 @@ public class Ship extends Prop{
 	Point origin;
 	
 	public Ship(int x, int y) {
-		super(x, y, 20,20,new Polygon(new int[] {x + 8, x - 8, x}, new int[] {y - 8, y - 8, y + 12}, 3));
+		super(x, y, 0,0,new Polygon(new int[] {x + 8, x - 8, x}, new int[] {y - 8, y - 8, y + 12}, 3));
 		rotationAngle = 0.0;
 		origin = new Point(x,y);
 		// TODO Auto-generated constructor stub
@@ -18,11 +18,11 @@ public class Ship extends Prop{
 
 	public void setMoveVec() {
 		if(rotationAngle == 0.0) {
-			this.yVel = -10;
+			this.yVel = 10;
 			this.xVel = 0;
 		}
 		else {
-			this.yVel = -10 * Math.sin(Math.toRadians(rotationAngle+90));
+			this.yVel = 10 * Math.sin(Math.toRadians(rotationAngle+90));
 			this.xVel = 10 * Math.cos(Math.toRadians(rotationAngle+90));
 		}
 		
