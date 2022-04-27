@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
 import java.awt.Rectangle;
@@ -20,9 +19,28 @@ public class Prop extends JPanel{
 		bBox = r;
 	}
 	
+	public void Inbounds() {
+		if (center.x>1000) {
+			center.x -= 1000;
+			bBox.translate(-1000, 0);
+		}
+		else if( center.x<0) {
+			center.x += 1000;
+			bBox.translate(1000, 0);
+		}
+		
+		if (center.y>1000) {
+			center.y -= 1000;
+			bBox.translate(0,-1000);
+		}
+		else if( center.y<0) {
+			center.y += 1000;
+			bBox.translate(0, 1000);
+		}
+	}
+	
 	
 	public void paintComponent(Graphics g) {
-		g.setColor(Color.WHITE);
 		g.drawPolygon(bBox);
 	}
 	
