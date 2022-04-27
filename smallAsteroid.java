@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
 
@@ -18,10 +19,9 @@ public class smallAsteroid extends Prop{
 	}
 	
 	public void paintComponent(Graphics window) {
-		for (Polygon p: smallAsts)  {
-			window.drawPolygon(p);
-		}
-			
+		window.setColor(Color.white);
+		window.drawPolygon(bBox);
+		move();
 	}
 	
 }
