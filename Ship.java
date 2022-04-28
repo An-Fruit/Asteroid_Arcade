@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
@@ -26,6 +25,11 @@ public class Ship extends Prop{
 		
 	}
 	
+	public double[] getMoveVec() {
+		double[] arr = new double[] {xVel, yVel};
+		return arr;
+	}
+	
 	public void move() {
 		getCenter().x += xVel;
 		getCenter().y += yVel;
@@ -39,6 +43,7 @@ public class Ship extends Prop{
 	public void rotateShip(double inc) {
 		rotatePointMatrix(getOriginalPts(), rotationAngle + inc, pts);
 		Polygon polytemp = polygonize();
+		super.setPoly(polytemp);
 		rotationAngle += inc;
 		if(rotationAngle >= 360) {
 			rotationAngle %= 360;
@@ -47,8 +52,6 @@ public class Ship extends Prop{
 			rotationAngle = 360 + rotationAngle;
 		}
 		setMoveVec();
-		super.setPoly(polytemp);
-	
 	}
 	
 	public void rotatePointMatrix(Point[] original, double angle, Point[] fin){
@@ -73,8 +76,7 @@ public class Ship extends Prop{
        return tempPoly;
 	}
 	
-	
-	
+
 	public Point[] getOriginalPts() {
 		Point[] origin;
 		origin = new Point[3];
@@ -83,14 +85,8 @@ public class Ship extends Prop{
 		origin[2] = new Point((int)getCenter().x, (int)getCenter().y + 12);
 		return origin;
 	}
-	
-	public void paintComponent(Graphics g) {
-		g.setColor(new Color(255,100,255));
-		g.drawPolygon(bBox);
-		
-	}
-	
-	public void Inbounds() {
+  
+  public void Inbounds() {
 		if (center.x>1000) {
 			center.x -= 1000;
 			for(Point pt : pts) {
@@ -121,4 +117,5 @@ public class Ship extends Prop{
 			super.setPoly(polygonize());
 		}
 	}
+}
 }

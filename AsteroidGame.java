@@ -39,7 +39,7 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 		// Is responsible for running all the Asteroids
 		for (Prop p: Asteroids) {
 			p.paintComponent(g);
-			p.Inbounds();
+  	  p.Inbounds();
 		}
 		while(!AsteroidsQ.isEmpty()) {
 			Asteroids.add(AsteroidsQ.poll());

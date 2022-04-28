@@ -28,12 +28,16 @@ public class Prop extends JPanel{
 			center.x += 1000;
 			bBox.translate(1000, 0);
 		}
-		
 		if (center.y>=1000) {
 			center.y -= 1000;
 			bBox.translate(0,-1000);
 		}
 		else if( center.y<=0) {
+		if (center.y>1000) {
+			center.y -= 1000;
+			bBox.translate(0,-1000);
+		}
+		else if( center.y<0) {
 			center.y += 1000;
 			bBox.translate(0, 1000);
 		}
