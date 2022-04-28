@@ -18,12 +18,14 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 	public AsteroidGame() {
 		// instantiates instance variables
 		Asteroids = new HashSet<>();
-		Asteroids.add(new bigAsteroid(100,0,10,5));
+		Asteroids.add(new bigAsteroid(100,0,2,1));
 		AsteroidsQ = new LinkedList<>();
 		ship = new Ship(500,500);
+		Asteroids.add(ship);
 		RemoveAsteroidsQ = new LinkedList<>();
 		
 		// sets up JPanel properties
+		setSize(1000,1000);
 		addKeyListener(this);
 		setFocusable(true);
 		new Thread(this).start();
@@ -37,6 +39,7 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 		// Is responsible for running all the Asteroids
 		for (Prop p: Asteroids) {
 			p.paintComponent(g);
+  	  p.Inbounds();
 		}
 		while(!AsteroidsQ.isEmpty()) {
 			Asteroids.add(AsteroidsQ.poll());
@@ -50,10 +53,10 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		if(arg0.getKeyCode() == 37) {
-			ship.rotateShip(-7.0);
+			ship.rotateShip(-15.0);
 		}
 		else if(arg0.getKeyCode() == 39) {
-			ship.rotateShip(7.0);
+			ship.rotateShip(15.0);
 		}
 		else if(arg0.getKeyCode() == 38) {
 			ship.move();

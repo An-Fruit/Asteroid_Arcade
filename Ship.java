@@ -7,23 +7,20 @@ public class Ship extends Prop{
 	
 	Point[] pts = getOriginalPts();
 	double rotationAngle;
-	Point origin;
 	
 	public Ship(int x, int y) {
 		super(x, y, 0,0,new Polygon(new int[] {x + 8, x - 8, x}, new int[] {y - 8, y - 8, y + 12}, 3));
 		rotationAngle = 0.0;
-		origin = new Point(x,y);
-		// TODO Auto-generated constructor stub
 	}
 
 	public void setMoveVec() {
 		if(rotationAngle == 0.0) {
-			this.yVel = 10;
+			this.yVel = 20;
 			this.xVel = 0;
 		}
 		else {
-			this.yVel = 10 * Math.sin(Math.toRadians(rotationAngle+90));
-			this.xVel = 10 * Math.cos(Math.toRadians(rotationAngle+90));
+			this.yVel = 20 * Math.sin(Math.toRadians(rotationAngle+90));
+			this.xVel = 20 * Math.cos(Math.toRadians(rotationAngle+90));
 		}
 		
 	}
@@ -79,8 +76,7 @@ public class Ship extends Prop{
        return tempPoly;
 	}
 	
-	
-	
+
 	public Point[] getOriginalPts() {
 		Point[] origin;
 		origin = new Point[3];
@@ -89,4 +85,37 @@ public class Ship extends Prop{
 		origin[2] = new Point((int)getCenter().x, (int)getCenter().y + 12);
 		return origin;
 	}
+  
+  public void Inbounds() {
+		if (center.x>1000) {
+			center.x -= 1000;
+			for(Point pt : pts) {
+				pt.x -=1000;
+			}
+			super.setPoly(polygonize());
+		}
+		else if( center.x<0) {
+			center.x += 1000;
+			for(Point pt : pts) {
+				pt.x +=1000;
+			}
+			super.setPoly(polygonize());
+		}
+		
+		if (center.y>=1000) {
+			center.y -= 1000;
+			for(Point pt : pts) {
+				pt.y -=1000;
+			}
+			super.setPoly(polygonize());
+		}
+		else if( center.y<=0) {
+			center.y += 1000;
+			for(Point pt : pts) {
+				pt.y +=1000;
+			}
+			super.setPoly(polygonize());
+		}
+	}
+}
 }
