@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
 import java.awt.Rectangle;
@@ -11,14 +12,14 @@ public class Prop extends JPanel{
 	boolean hit;
 	Polygon bBox;
 	
-	public Prop(int x, int y, int xVel, int yVel, Polygon r) {
+	public Prop(int x, int y, double xVel, double yVel, Polygon r) {
 		center = new Point(x, y);
 		this.xVel = xVel;
 		this.yVel = yVel;
 		hit = false;
 		bBox = r;
 	}
-	
+  
 	public void Inbounds() {
 		if (center.x>1000) {
 			center.x -= 1000;
@@ -42,9 +43,10 @@ public class Prop extends JPanel{
 			bBox.translate(0, 1000);
 		}
 	}
-	
-	
+
+
 	public void paintComponent(Graphics g) {
+		g.setColor(Color.WHITE);
 		g.drawPolygon(bBox);
 	}
 	
@@ -67,5 +69,9 @@ public class Prop extends JPanel{
 		center.x += xVel;
 		center.y += yVel;
 		bBox.translate((int)xVel,  (int)yVel);
+	}
+	public String toString() {
+		String s = "X Velocity: "  + xVel + " Y Velociity: " + yVel + " X Location: " + center.x + " Y Location: " + center.y;
+		return s;
 	}
 }

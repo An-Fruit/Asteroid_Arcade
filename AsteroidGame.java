@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.ArrayList;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
@@ -15,6 +16,7 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 	HashSet<Prop> Asteroids;
 	Queue<Prop> AsteroidsQ;
 	Queue<Prop> RemoveAsteroidsQ;
+	ArrayList<Bullet> projectiles;
 	public AsteroidGame() {
 		// instantiates instance variables
 		Asteroids = new HashSet<>();
@@ -23,7 +25,7 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 		ship = new Ship(500,500);
 		Asteroids.add(ship);
 		RemoveAsteroidsQ = new LinkedList<>();
-		
+		projectiles = new ArrayList<>();
 		// sets up JPanel properties
 		setSize(1000,1000);
 		addKeyListener(this);
@@ -47,21 +49,34 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 		while(!RemoveAsteroidsQ.isEmpty()) {
 			Asteroids.remove(RemoveAsteroidsQ.poll());
 		}
+		
+		for(Bullet b : projectiles) {
+			b.paintComponent(g);
+			b.move();
+		}
 	}
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
+		//left arrow
 		if(arg0.getKeyCode() == 37) {
 			ship.rotateShip(-15.0);
 		}
+		//right arrow
 		else if(arg0.getKeyCode() == 39) {
 			ship.rotateShip(15.0);
 		}
+		//up arrow
 		else if(arg0.getKeyCode() == 38) {
 			ship.move();
 		}
-		System.out.println(arg0.getKeyCode());
+		//spacebar
+		else if(arg0.getKeyCode() == 32) {
+			double[] temp = ship.getMoveVec();
+			projectiles.add(new Bullet((int)ship.center.x, (int)ship.center.y, temp[0], temp[1]));
+		}
+		System.out.println(arg0.getKeyCode() + " " + projectiles);
 	}
 
 	@Override
