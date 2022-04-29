@@ -23,7 +23,6 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 		Asteroids.add(new bigAsteroid(100,0,2,1));
 		AsteroidsQ = new LinkedList<>();
 		ship = new Ship(500,500);
-		Asteroids.add(ship);
 		RemoveAsteroidsQ = new LinkedList<>();
 		projectiles = new ArrayList<>();
 		// sets up JPanel properties
@@ -36,12 +35,28 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 	
 		g.setColor(Color.BLACK);
 		g.fillPolygon(new Polygon(new int[] {0,1000,1000,0}, new int[] {0,0,1000,1000}, 4));
+		
+		// runs Ship
 		ship.paintComponent(g);
+		ship.Inbounds();
 		
 		// Is responsible for running all the Asteroids
 		for (Prop p: Asteroids) {
 			p.paintComponent(g);
-  	  p.Inbounds();
+			p.Inbounds();
+			if (p.hit) {
+				if (p instanceof bigAsteroid) {
+					((bigAsteroid) p).collapse(AsteroidsQ);
+					RemoveAsteroidsQ.add(p);
+				}
+				else if (p instanceof medAsteroid) {
+					((medAsteroid) p).collapse(AsteroidsQ);
+					RemoveAsteroidsQ.add(p);
+				}
+				else {
+					RemoveAsteroidsQ.add(p);
+				}
+ 			}
 		}
 		while(!AsteroidsQ.isEmpty()) {
 			Asteroids.add(AsteroidsQ.poll());
@@ -50,9 +65,14 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 			Asteroids.remove(RemoveAsteroidsQ.poll());
 		}
 		
+		// Is responsible for simulating bullets
 		for(Bullet b : projectiles) {
+			for (Prop p:Asteroids) {
+				if (p.bBox.contains(b.center.x, b.center.y)) {
+					p.hit = true;
+				}
+			}
 			b.paintComponent(g);
-			b.move();
 		}
 	}
 
@@ -99,6 +119,7 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 			while(true)
 			{
 				Thread.sleep(10);
+				
 				repaint();
 			}
 			
