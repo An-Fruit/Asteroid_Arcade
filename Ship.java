@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
@@ -117,5 +118,9 @@ public class Ship extends Prop{
 			super.setPoly(polygonize());
 		}
 	}
-}
+  
+  	public void paintComponent(Graphics g) {
+  		g.setColor(Color.WHITE);
+		g.drawPolygon(bBox);
+	}
 }
