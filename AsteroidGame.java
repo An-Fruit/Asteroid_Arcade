@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
@@ -17,12 +18,14 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 	Queue<Prop> AsteroidsQ;
 	Queue<Prop> RemoveAsteroidsQ;
 	ArrayList<Bullet> projectiles;
+	Queue<Bullet> RemoveBulletQ;
 	public AsteroidGame() {
 		// instantiates instance variables
 		Asteroids = new HashSet<>();
 		Asteroids.add(new bigAsteroid(100,0,2,1));
 		AsteroidsQ = new LinkedList<>();
 		ship = new Ship(500,500);
+		RemoveBulletQ = new LinkedList<>();
 		RemoveAsteroidsQ = new LinkedList<>();
 		projectiles = new ArrayList<>();
 		// sets up JPanel properties
@@ -38,6 +41,8 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 		
 		// runs Ship
 		ship.paintComponent(g);
+		ship.move();
+		ship.rotateShip();
 		ship.Inbounds();
 		
 		// Is responsible for running all the Asteroids
@@ -67,12 +72,18 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 		
 		// Is responsible for simulating bullets
 		for(Bullet b : projectiles) {
+			b.paintComponent(g);
 			for (Prop p:Asteroids) {
 				if (p.bBox.contains(b.center.x, b.center.y)) {
 					p.hit = true;
+					b.hit = true;
 				}
 			}
-			b.paintComponent(g);
+			if(b.hit || b.center.x > 1000 || b.center.x < 0 || b.center.y > 1000 || b.center.x < 0) RemoveBulletQ.add(b);
+		}
+		
+		while(!RemoveBulletQ.isEmpty()) {
+			projectiles.remove(RemoveBulletQ.poll());
 		}
 	}
 
@@ -81,22 +92,23 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 		// TODO Auto-generated method stub
 		//left arrow
 		if(arg0.getKeyCode() == 37) {
-			ship.rotateShip(-15.0);
+			ship.accelRotate(-8.0);
 		}
 		//right arrow
 		else if(arg0.getKeyCode() == 39) {
-			ship.rotateShip(15.0);
+			ship.accelRotate(8.0);
 		}
 		//up arrow
 		else if(arg0.getKeyCode() == 38) {
-			ship.move();
+			ship.accelMove(5);
 		}
 		//spacebar
 		else if(arg0.getKeyCode() == 32) {
 			double[] temp = ship.getMoveVec();
+			System.out.println(projectiles);
 			projectiles.add(new Bullet((int)ship.center.x, (int)ship.center.y, temp[0], temp[1]));
 		}
-		System.out.println(arg0.getKeyCode() + " " + projectiles);
+		System.out.println(arg0.getKeyCode() + " "); //+ projectiles);
 	}
 
 	@Override
@@ -118,8 +130,9 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 		{
 			while(true)
 			{
+				ship.decayAngle();
+				ship.decayVel();
 				Thread.sleep(10);
-				
 				repaint();
 			}
 			

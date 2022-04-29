@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
@@ -8,26 +7,50 @@ public class Ship extends Prop{
 	
 	Point[] pts = getOriginalPts();
 	double rotationAngle;
-	
+	double angleAccel;
+	double angleDecay;
+	double velDecay;
+	int normalVec;
 	public Ship(int x, int y) {
 		super(x, y, 0,0,new Polygon(new int[] {x + 8, x - 8, x}, new int[] {y - 8, y - 8, y + 12}, 3));
 		rotationAngle = 0.0;
+		angleAccel = 0.0;
+		normalVec = 20;
+		velDecay = .9;
+		angleDecay = .9;
 	}
-
+	
+	public void accelRotate(double temp) {
+		angleAccel += temp;
+	}
+	public void accelMove(double temp) {
+		if(normalVec + temp <= 20) {
+			normalVec += temp;
+		}
+		else normalVec = 20;
+	}
+	public void decayVel() {
+		normalVec *= velDecay;
+		setMoveVec();
+	}
+	public void decayAngle() {
+		angleAccel *= angleDecay;
+	}
+	
 	public void setMoveVec() {
-		if(rotationAngle == 0.0) {
-			this.yVel = 20;
-			this.xVel = 0;
-		}
-		else {
-			this.yVel = 20 * Math.sin(Math.toRadians(rotationAngle+90));
-			this.xVel = 20 * Math.cos(Math.toRadians(rotationAngle+90));
-		}
+//		if(rotationAngle == 0.0) {
+//			this.yVel = normalVec;
+//			this.xVel = 0;
+//		}
+//		else {
+			this.yVel = normalVec * Math.sin(Math.toRadians(rotationAngle+90));
+			this.xVel = normalVec * Math.cos(Math.toRadians(rotationAngle+90));
+//		}
 		
 	}
 	
 	public double[] getMoveVec() {
-		double[] arr = new double[] {xVel, yVel};
+		double[] arr = new double[] {10 * Math.cos(Math.toRadians(rotationAngle+90)), 10 * Math.sin(Math.toRadians(rotationAngle+90))};
 		return arr;
 	}
 	
@@ -41,11 +64,12 @@ public class Ship extends Prop{
 		super.setPoly(polygonize());
 	}
 	
-	public void rotateShip(double inc) {
-		rotatePointMatrix(getOriginalPts(), rotationAngle + inc, pts);
+	public void rotateShip() {
+		
+		rotatePointMatrix(getOriginalPts(), rotationAngle + angleAccel, pts);
 		Polygon polytemp = polygonize();
 		super.setPoly(polytemp);
-		rotationAngle += inc;
+		rotationAngle += angleAccel;
 		if(rotationAngle >= 360) {
 			rotationAngle %= 360;
 		}
@@ -117,10 +141,5 @@ public class Ship extends Prop{
 			}
 			super.setPoly(polygonize());
 		}
-	}
-  
-  	public void paintComponent(Graphics g) {
-  		g.setColor(Color.WHITE);
-		g.drawPolygon(bBox);
 	}
 }
