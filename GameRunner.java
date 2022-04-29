@@ -9,7 +9,7 @@ public class GameRunner extends JFrame{
 	
 	public GameRunner() {
 		super("Game Runner");
-
+		
 		setSize(WIDTH,HEIGHT);
 			
         AsteroidGame game = new AsteroidGame();
