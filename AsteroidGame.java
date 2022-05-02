@@ -13,6 +13,9 @@ import java.util.Queue;
 import javax.swing.JPanel;
 
 public class AsteroidGame extends JPanel implements KeyListener, Runnable{
+	long time;
+	long prevFireTime;
+	int firerate;
 	Ship ship;
 	HashSet<Prop> Asteroids;
 	Queue<Prop> AsteroidsQ;
@@ -24,6 +27,7 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 		Asteroids = new HashSet<>();
 		Asteroids.add(new bigAsteroid(100,0,2,1));
 		AsteroidsQ = new LinkedList<>();
+		firerate = 100;
 		ship = new Ship(500,500);
 		RemoveBulletQ = new LinkedList<>();
 		RemoveAsteroidsQ = new LinkedList<>();
@@ -104,10 +108,11 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 			ship.accelMove(5);
 		}
 		//spacebar
-		else if(arg0.getKeyCode() == 32) {
+		else if(arg0.getKeyCode() == 32 && time >= prevFireTime + firerate) {
 			double[] temp = ship.getMoveVec();
 			System.out.println(projectiles);
 			projectiles.add(new Bullet((int)ship.center.x, (int)ship.center.y, temp[0], temp[1]));
+			prevFireTime = System.currentTimeMillis();
 		}
 		System.out.println(arg0.getKeyCode() + " "); //+ projectiles);
 	}
@@ -133,6 +138,7 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 			{
 				ship.decayAngle();
 				ship.decayVel();
+				time = System.currentTimeMillis();
 				Thread.sleep(10);
 				repaint();
 			}
