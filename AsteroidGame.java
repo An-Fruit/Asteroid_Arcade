@@ -34,6 +34,7 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 		setFocusable(true);
 		new Thread(this).start();
 	}
+	
 	public void paintComponent(Graphics g) {
 	
 		g.setColor(Color.BLACK);
