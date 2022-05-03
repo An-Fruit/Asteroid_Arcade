@@ -10,7 +10,8 @@ public class Ship extends Prop{
 	double angleAccel;
 	double angleDecay;
 	double velDecay;
-	int normalVec;
+	double normalVec;
+	int fireRate;
 	public Ship(int x, int y) {
 		super(x, y, 0,0,new Polygon(new int[] {x + 8, x - 8, x}, new int[] {y - 8, y - 8, y + 12}, 3));
 		rotationAngle = 0.0;
@@ -18,6 +19,7 @@ public class Ship extends Prop{
 		normalVec = 20;
 		velDecay = .9;
 		angleDecay = .9;
+		fireRate = 10;
 	}
 	
 	public void accelRotate(double temp) {
@@ -30,7 +32,7 @@ public class Ship extends Prop{
 		else normalVec = 20;
 	}
 	public void decayVel() {
-		normalVec *= velDecay;
+		normalVec *= velDecay;		
 		setMoveVec();
 	}
 	public void decayAngle() {
@@ -142,4 +144,13 @@ public class Ship extends Prop{
 			super.setPoly(polygonize());
 		}
 	}
+  
+  public boolean countDown() {
+	  if (fireRate-- <= 0) {
+		  fireRate = 10;
+		  return true;
+	  }
+	  return false;
+  }
+  
 }

@@ -40,7 +40,7 @@ public class bigAsteroid extends Prop{
 	
 	public void changeAsteroid() {
 		
-		this.bBox = bigAsts[(int)Math.random()*4];
+		this.bBox = bigAsts[(int)(Math.random()*4)];
 	}
 	
 	public void paintComponent(Graphics window) {

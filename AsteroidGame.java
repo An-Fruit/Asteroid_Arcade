@@ -13,29 +13,39 @@ import java.util.Queue;
 import javax.swing.JPanel;
 
 public class AsteroidGame extends JPanel implements KeyListener, Runnable{
-	long time;
-	long prevFireTime;
-	int firerate;
 	Ship ship;
 	HashSet<Prop> Asteroids;
 	Queue<Prop> AsteroidsQ;
 	Queue<Prop> RemoveAsteroidsQ;
 	ArrayList<Bullet> projectiles;
 	Queue<Bullet> RemoveBulletQ;
+	boolean up, left, right, shoot;
+	int hp;
+	int invincibilityFrames;
+	boolean invincible;
 	public AsteroidGame() {
 		// instantiates instance variables
 		Asteroids = new HashSet<>();
-		Asteroids.add(new bigAsteroid(100,0,2,1));
+		for (int i = 0;i<10;i++) {
+			int x = (int)(Math.random()*1000);
+			int y = (int)(Math.random()*1000);
+			Asteroids.add(new bigAsteroid(x,y,2,1));
+		}
 		AsteroidsQ = new LinkedList<>();
-		firerate = 100;
 		ship = new Ship(500,500);
 		RemoveBulletQ = new LinkedList<>();
 		RemoveAsteroidsQ = new LinkedList<>();
 		projectiles = new ArrayList<>();
+		up = false; left = false; right= false; shoot = false;
+		hp = 5;
+		invincibilityFrames = 3000;
+		invincible  = false;
+		
 		// sets up JPanel properties
 		setSize(1000,1000);
 		addKeyListener(this);
 		setFocusable(true);
+		
 		new Thread(this).start();
 	}
 	
@@ -44,16 +54,86 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 		g.setColor(Color.BLACK);
 		g.fillPolygon(new Polygon(new int[] {0,1000,1000,0}, new int[] {0,0,1000,1000}, 4));
 		
+		g.setColor(Color.WHITE);
+		g.drawString("HP: " + hp, 50, 50);
+		g.setColor(Color.black);
+		
 		// runs Ship
 		ship.paintComponent(g);
 		ship.move();
 		ship.rotateShip();
 		ship.Inbounds();
-		
+		if (shoot) {
+			double[] temp = ship.getMoveVec();
+			System.out.println("dog");
+			if (left && up) {
+				if (ship.countDown()) {
+					projectiles.add(new Bullet((int)ship.center.x, (int)ship.center.y, temp[0], temp[1]));
+				}
+				ship.accelMove(0.75);
+				ship.accelRotate(-0.4);
+			}
+			else if (left) {
+				if (ship.countDown()) {
+					projectiles.add(new Bullet((int)ship.center.x, (int)ship.center.y, temp[0], temp[1]));
+				}
+				ship.accelRotate(-0.4);
+			}
+			else if (right && up) {
+				if (ship.countDown()) {
+					projectiles.add(new Bullet((int)ship.center.x, (int)ship.center.y, temp[0], temp[1]));
+				}
+				ship.accelRotate(0.4);
+				ship.accelMove(0.75);
+			}
+			else if (right) {
+				if (ship.countDown()) {
+					projectiles.add(new Bullet((int)ship.center.x, (int)ship.center.y, temp[0], temp[1]));
+				}
+				ship.accelRotate(0.4);
+				
+			}
+			else if (up) {
+				if (ship.countDown()) {
+					projectiles.add(new Bullet((int)ship.center.x, (int)ship.center.y, temp[0], temp[1]));
+				}
+				ship.accelMove(0.75);
+			}
+			else {
+				if (ship.countDown()) {
+					projectiles.add(new Bullet((int)ship.center.x, (int)ship.center.y, temp[0], temp[1]));
+				}
+			}
+		}
+		else if ( left || up || right) {
+			
+			if (left && up) {
+				ship.accelMove(0.75);
+				ship.accelRotate(-0.4);
+			}
+			else if (left) {
+				ship.accelRotate(-0.4);
+
+			}
+			else if (right && up) {
+				ship.accelRotate(0.4);
+				ship.accelMove(0.75);
+			}
+			else if (right) {
+				ship.accelRotate(0.4);
+			}
+			else if (up) {
+				ship.accelMove(0.75);
+			}
+		}
 		// Is responsible for running all the Asteroids
 		for (Prop p: Asteroids) {
 			p.paintComponent(g);
 			p.Inbounds();
+			if (p.bBox.contains(ship.center.x, ship.center.y) && !invincible) {
+				hp--;
+				invincible = true;
+			}
 			if (p.hit) {
 				if (p instanceof bigAsteroid) {
 					((bigAsteroid) p).collapse(AsteroidsQ);
@@ -90,6 +170,13 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 		while(!RemoveBulletQ.isEmpty()) {
 			projectiles.remove(RemoveBulletQ.poll());
 		}
+		if (Asteroids.isEmpty()) {
+			for (int i = 0;i<10;i++) {
+				int x = (int)(Math.random()*1000);
+				int y = (int)(Math.random()*1000);
+				Asteroids.add(new bigAsteroid(x,y,2,1));
+			}
+		}
 	}
 
 	@Override
@@ -97,22 +184,19 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 		// TODO Auto-generated method stub
 		//left arrow
 		if(arg0.getKeyCode() == 37) {
-			ship.accelRotate(-8.0);
+			left = true;
 		}
 		//right arrow
 		else if(arg0.getKeyCode() == 39) {
-			ship.accelRotate(8.0);
+			right = true;
 		}
 		//up arrow
 		else if(arg0.getKeyCode() == 38) {
-			ship.accelMove(5);
+			up = true;
 		}
 		//spacebar
-		else if(arg0.getKeyCode() == 32 && time >= prevFireTime + firerate) {
-			double[] temp = ship.getMoveVec();
-			System.out.println(projectiles);
-			projectiles.add(new Bullet((int)ship.center.x, (int)ship.center.y, temp[0], temp[1]));
-			prevFireTime = System.currentTimeMillis();
+		else if(arg0.getKeyCode() == 32 ) {
+			shoot  = true;
 		}
 		System.out.println(arg0.getKeyCode() + " "); //+ projectiles);
 	}
@@ -120,7 +204,18 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		
+		if (arg0.getKeyCode() == 37) {
+			left = false;
+		}
+		else if (arg0.getKeyCode() == 39){
+			right = false;
+		}
+		else if (arg0.getKeyCode() == 38) {
+			up = false;
+		}
+		else if(arg0.getKeyCode() == 32 ) { 
+			shoot = false;
+		}
 	}
 
 	@Override
@@ -138,7 +233,16 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 			{
 				ship.decayAngle();
 				ship.decayVel();
-				time = System.currentTimeMillis();
+				if (invincible) {
+					invincibilityFrames-=10;
+					if (invincibilityFrames<=0) {
+						invincible = false;
+						invincibilityFrames = 3000;
+					}
+				}
+				if (hp<=0) {
+					break;
+				}
 				Thread.sleep(10);
 				repaint();
 			}

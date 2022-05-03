@@ -15,7 +15,7 @@ public class smallAsteroid extends Prop{
 	
 	public void changeAsteroid() {
 		
-		this.bBox = smallAsts[(int)Math.random()*2];
+		this.bBox = smallAsts[(int)(Math.random()*2)];
 	}
 	
 	public void paintComponent(Graphics window) {

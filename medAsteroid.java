@@ -39,7 +39,7 @@ public class medAsteroid extends Prop {
 	
 	public void changeAsteroid() {
 		
-		this.bBox = medAsts[(int)Math.random()*3];
+		this.bBox = medAsts[(int)(Math.random()*3)];
 	}
 	
 	public void paintComponent(Graphics window) {
