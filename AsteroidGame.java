@@ -1,9 +1,11 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashSet;
@@ -23,6 +25,7 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 	int hp;
 	int invincibilityFrames;
 	boolean invincible;
+	int score;
 	public AsteroidGame() {
 		// instantiates instance variables
 		Asteroids = new HashSet<>();
@@ -38,8 +41,9 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 		projectiles = new ArrayList<>();
 		up = false; left = false; right= false; shoot = false;
 		hp = 5;
-		invincibilityFrames = 3000;
+		invincibilityFrames = 1000;
 		invincible  = false;
+		score = 0;
 		
 		// sets up JPanel properties
 		setSize(1000,1000);
@@ -50,12 +54,12 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 	}
 	
 	public void paintComponent(Graphics g) {
-	
 		g.setColor(Color.BLACK);
 		g.fillPolygon(new Polygon(new int[] {0,1000,1000,0}, new int[] {0,0,1000,1000}, 4));
 		
 		g.setColor(Color.WHITE);
 		g.drawString("HP: " + hp, 50, 50);
+		g.drawString("Score: " + score, 50, 75);
 		g.setColor(Color.black);
 		
 		// runs Ship
@@ -136,14 +140,17 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 			}
 			if (p.hit) {
 				if (p instanceof bigAsteroid) {
+					score+=25;
 					((bigAsteroid) p).collapse(AsteroidsQ);
 					RemoveAsteroidsQ.add(p);
 				}
 				else if (p instanceof medAsteroid) {
+					score+=50;
 					((medAsteroid) p).collapse(AsteroidsQ);
 					RemoveAsteroidsQ.add(p);
 				}
 				else {
+					score+=100;
 					RemoveAsteroidsQ.add(p);
 				}
  			}
@@ -176,6 +183,11 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 				int y = (int)(Math.random()*1000);
 				Asteroids.add(new bigAsteroid(x,y,2,1));
 			}
+		}
+
+		if (hp<=0) {
+			Image bigL = Toolkit.getDefaultToolkit().getImage("l.png");
+			g.drawImage(bigL, 0,0,1000,1000,this);
 		}
 	}
 
@@ -237,11 +249,8 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 					invincibilityFrames-=10;
 					if (invincibilityFrames<=0) {
 						invincible = false;
-						invincibilityFrames = 3000;
+						invincibilityFrames = 1000;
 					}
-				}
-				if (hp<=0) {
-					break;
 				}
 				Thread.sleep(10);
 				repaint();
