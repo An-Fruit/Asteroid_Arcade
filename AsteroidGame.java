@@ -22,19 +22,22 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 	ArrayList<Bullet> projectiles;
 	Queue<Bullet> RemoveBulletQ;
 	boolean up, left, right, shoot;
-	int invincibilityFrames, hp, score;
+	int invincibilityFrames, hp, score, WIDTH, HEIGHT, a;
 	boolean invincible, menu;
 	
-	public AsteroidGame() {
+	public AsteroidGame(int w, int h) {
 		// instantiates instance variables
+		WIDTH = w;
+		HEIGHT = h;
 		Asteroids = new HashSet<>();
-		for (int i = 0;i<10;i++) {
-			int x = (int)(Math.random()*1000);
-			int y = (int)(Math.random()*1000);
-			Asteroids.add(new bigAsteroid(x,y,2,1));
+		a = (int)(.01 * WIDTH);
+		for (int i = 0;i<a;i++) {
+			int x = (int)(Math.random()*WIDTH);
+			int y = (int)(Math.random()*HEIGHT);
+			Asteroids.add(new bigAsteroid(x,y,(int)(.002 * WIDTH),(int)(.001 * HEIGHT)));
 		}
 		AsteroidsQ = new LinkedList<>();
-		ship = new Ship(500,500);
+		ship = new Ship(500,500, (int)(.02 * WIDTH));
 		RemoveBulletQ = new LinkedList<>();
 		RemoveAsteroidsQ = new LinkedList<>();
 		projectiles = new ArrayList<>();
@@ -46,7 +49,7 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 		score = 0;
 		
 		// sets up JPanel properties
-		setSize(1000,1000);
+//		setSize(1000,1000);
 		addKeyListener(this);
 		setFocusable(true);
 		
@@ -54,27 +57,31 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 	}
 	
 	public void paintComponent(Graphics g) {
+		WIDTH = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+		HEIGHT = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 		if(menu) {
 			g.setColor(Color.BLACK);
-			g.fillPolygon(new Polygon(new int[] {0,1000,1000,0}, new int[] {0,0,1000,1000}, 4));
+			g.fillRect(0, 0, WIDTH, HEIGHT);
+//			g.fillPolygon(new Polygon(new int[] {0,WIDTH,WIDTH,0}, new int[] {0,0,HEIGHT,HEIGHT}, 4));
 			g.setColor(Color.white);
-			g.drawString("Press any key to start ", 400, 500);
+			g.drawString("Press any key to start ", WIDTH/2, HEIGHT/2);
 			
 		}
 		else {
 			g.setColor(Color.BLACK);
-			g.fillPolygon(new Polygon(new int[] {0,1000,1000,0}, new int[] {0,0,1000,1000}, 4));
+			g.fillRect(0, 0, WIDTH, HEIGHT);
+//			g.fillPolygon(new Polygon(new int[] {0,1000,1000,0}, new int[] {0,0,1000,1000}, 4));
 			
 			g.setColor(Color.WHITE);
-			g.drawString("HP: " + hp, 50, 50);
-			g.drawString("Score: " + score, 50, 75);
+			g.drawString("HP: " + hp, (int)(.05 * WIDTH), (int)(.05 * HEIGHT));
+			g.drawString("Score: " + score, (int)(.05 * WIDTH), (int)(.075 * HEIGHT));
 			g.setColor(Color.black);
 			
 			// runs Ship
 			ship.paintComponent(g);
 			ship.move();
 			ship.rotateShip();
-			ship.Inbounds();
+			ship.Inbounds(WIDTH, HEIGHT);
 			if (shoot) {
 				double[] temp = ship.getMoveVec();
 				System.out.println("dog");
@@ -82,7 +89,7 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 					if (ship.countDown()) {
 						projectiles.add(new Bullet((int)ship.center.x, (int)ship.center.y, temp[0], temp[1]));
 					}
-					ship.accelMove(0.75);
+					ship.accelMove(0.00075 * WIDTH);
 					ship.accelRotate(-0.4);
 				}
 				else if (left) {
@@ -96,7 +103,7 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 						projectiles.add(new Bullet((int)ship.center.x, (int)ship.center.y, temp[0], temp[1]));
 					}
 					ship.accelRotate(0.4);
-					ship.accelMove(0.75);
+					ship.accelMove(0.00075 * WIDTH);
 				}
 				else if (right) {
 					if (ship.countDown()) {
@@ -109,7 +116,7 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 					if (ship.countDown()) {
 						projectiles.add(new Bullet((int)ship.center.x, (int)ship.center.y, temp[0], temp[1]));
 					}
-					ship.accelMove(0.75);
+					ship.accelMove(0.00075 * WIDTH);
 				}
 				else {
 					if (ship.countDown()) {
@@ -120,7 +127,7 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 			else if ( left || up || right) {
 				
 				if (left && up) {
-					ship.accelMove(0.75);
+					ship.accelMove(0.00075 * WIDTH);
 					ship.accelRotate(-0.4);
 				}
 				else if (left) {
@@ -129,20 +136,20 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 				}
 				else if (right && up) {
 					ship.accelRotate(0.4);
-					ship.accelMove(0.75);
+					ship.accelMove(0.00075 * WIDTH);
 				}
 				else if (right) {
 					ship.accelRotate(0.4);
 				}
 				else if (up) {
-					ship.accelMove(0.75);
+					ship.accelMove(0.00075 * WIDTH);
 				}
 			}
 			
 			// Is responsible for running all the Asteroids
 			for (Prop p: Asteroids) {
 				p.paintComponent(g);
-				p.Inbounds();
+				p.Inbounds(WIDTH, HEIGHT);
 				if (p.bBox.contains(ship.center.x, ship.center.y) && !invincible) {
 					hp--;
 					invincible = true;
@@ -180,7 +187,7 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 						b.hit = true;
 					}
 				}
-				if(b.hit || b.center.x > 1000 || b.center.x < 0 || b.center.y > 1000 || b.center.x < 0) RemoveBulletQ.add(b);
+				if(b.hit || b.center.x > WIDTH || b.center.x < 0 || b.center.y > HEIGHT || b.center.x < 0) RemoveBulletQ.add(b);
 			}
 			
 			while(!RemoveBulletQ.isEmpty()) {
@@ -188,15 +195,15 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 			}
 			if (Asteroids.isEmpty()) {
 				for (int i = 0;i<10;i++) {
-					int x = (int)(Math.random()*1000);
-					int y = (int)(Math.random()*1000);
+					int x = (int)(Math.random()*WIDTH);
+					int y = (int)(Math.random()*HEIGHT);
 					Asteroids.add(new bigAsteroid(x,y,2,1));
 				}
 			}
 	
 			if (hp<=0) {
 				Image bigL = Toolkit.getDefaultToolkit().getImage("l.png");
-				g.drawImage(bigL, 0,0,1000,1000,this);
+				g.drawImage(bigL, 0,0,WIDTH,HEIGHT,this);
 			}
 		}
 	}
@@ -260,13 +267,13 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 	
 	public void reset() {
 		Asteroids.clear();
-		for (int i = 0;i<10;i++) {
-			int x = (int)(Math.random()*1000);
-			int y = (int)(Math.random()*1000);
-			Asteroids.add(new bigAsteroid(x,y,2,1));
+		for (int i = 0;i<a;i++) {
+			int x = (int)(Math.random()*WIDTH);
+			int y = (int)(Math.random()*HEIGHT);
+			Asteroids.add(new bigAsteroid(x,y,(int)(.002 * WIDTH),(int)(.001 * HEIGHT)));
 		}
 		AsteroidsQ.clear();
-		ship = new Ship(500,500);
+		ship = new Ship(WIDTH/2,HEIGHT/2, (int)(.02 * WIDTH));
 		RemoveBulletQ.clear();
 		RemoveAsteroidsQ.clear();
 		projectiles.clear();
@@ -284,6 +291,7 @@ public class AsteroidGame extends JPanel implements KeyListener, Runnable{
 		{
 			while(true)
 			{
+				
 				ship.decayAngle();
 				ship.decayVel();
 				if (invincible) {

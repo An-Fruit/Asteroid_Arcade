@@ -20,23 +20,23 @@ public class Prop extends JPanel{
 		bBox = r;
 	}
 	
-	public void Inbounds() {
-		if (center.x>1000) {
-			center.x -= 1000;
-			bBox.translate(-1000, 0);
+	public void Inbounds(int w, int h) {
+		if (center.x>w) {
+			center.x -= w;
+			bBox.translate(-w, 0);
 		}
 		else if( center.x<0) {
-			center.x += 1000;
-			bBox.translate(1000, 0);
+			center.x += w;
+			bBox.translate(w, 0);
 		}
 		
-		if (center.y>=1000) {
-			center.y -= 1000;
-			bBox.translate(0,-1000);
+		if (center.y>=h) {
+			center.y -= h;
+			bBox.translate(0,-h);
 		}
 		else if( center.y<=0) {
-			center.y += 1000;
-			bBox.translate(0, 1000);
+			center.y += h;
+			bBox.translate(0, h);
 		}
 	}
 	

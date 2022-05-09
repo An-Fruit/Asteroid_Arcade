@@ -11,8 +11,9 @@ public class Ship extends Prop{
 	double angleDecay;
 	double velDecay;
 	double normalVec;
+	int speedCap;
 	int fireRate;
-	public Ship(int x, int y) {
+	public Ship(int x, int y, int s) {
 		super(x, y, 0,0,new Polygon(new int[] {x + 8, x - 8, x}, new int[] {y - 8, y - 8, y + 12}, 3));
 		rotationAngle = 0.0;
 		angleAccel = 0.0;
@@ -20,6 +21,7 @@ public class Ship extends Prop{
 		velDecay = .9;
 		angleDecay = .9;
 		fireRate = 10;
+		speedCap = s;
 	}
 	
 	public void accelRotate(double temp) {

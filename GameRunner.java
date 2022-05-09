@@ -1,24 +1,24 @@
 import java.awt.Color;
+import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 
 public class GameRunner extends JFrame{
 	
-	public static final int WIDTH = 1000;
-	public static final int HEIGHT = 1000;
+	
 	
 	public GameRunner() {
 		super("Game Runner");
 		
-		setSize(WIDTH,HEIGHT);
+		setSize((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(),(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight());
 			
-        AsteroidGame game = new AsteroidGame();
+        AsteroidGame game = new AsteroidGame((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth(), (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight());
        
 		add(game);
 		
 		setVisible(true);	
 		
-		setBackground(Color.BLUE);
+		setBackground(Color.BLACK);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
